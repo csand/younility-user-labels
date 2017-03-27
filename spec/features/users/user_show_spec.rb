@@ -36,4 +36,17 @@ feature 'User profile page', :devise do
     expect(page).to have_content 'Access denied.'
   end
 
+  # Scenario: Labels are displayed on user profile
+  #   Given I am signed include
+  #   When I visit another user's profile
+  #   Then I see that user's labels
+  scenario "labels are displayed on user's profile" do
+    user = FactoryGirl.create(:user, :admin)
+    label = FactoryGirl.create(:label)
+    user.labels << label
+    user.save
+    login_as(user, scope: :user)
+    visit user_path(user)
+    expect(page).to have_content(label.name)
+  end
 end

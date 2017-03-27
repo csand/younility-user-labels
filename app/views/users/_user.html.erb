@@ -2,6 +2,13 @@
   <%= link_to user.email, user %>
 </td>
 <td>
+  <% if user.labels.each do |label| %>
+    <%= render label %>
+  <% end.empty? %>
+    None
+  <% end %>
+</td>
+<td>
   <%= form_for(user) do |f| %>
     <%= f.select(:role, User.roles.keys.map {|role| [role.titleize,role]}) %>
     <%= f.submit 'Change Role', :class => 'button-xs' %>
