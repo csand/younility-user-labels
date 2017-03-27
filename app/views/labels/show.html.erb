@@ -1,0 +1,11 @@
+<h3>Users with Label
+  <span class="label label-default" style="background-color: <%= @label.color %>;">
+    <%= @label.name %>
+  </span>
+</h3>
+<% @label.users.each do |user| %>
+  <p>
+    <%= link_to user.email, user %>
+  </p>
+<% end %>
+<%= link_to 'Delete this label', label_path(@label), method: :delete %>

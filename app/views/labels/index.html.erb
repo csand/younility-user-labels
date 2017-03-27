@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="row">
+    <h3>Labels</h3>
+    <% if @labels.each do |label| %>
+      <%= render label %>
+    <% end.empty? %>
+      <p>None</p>
+    <% end %>
+  </div>
+</div>
