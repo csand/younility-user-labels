@@ -49,4 +49,49 @@ feature 'User profile page', :devise do
     visit user_path(user)
     expect(page).to have_content(label.name)
   end
+
+  # Scenario: Labels are displayed on user profile
+  #   Given I am signed in
+  #   When I visit my profile page
+  #   Then I see my labels
+  scenario "labels are displayed on user's profile" do
+    user = FactoryGirl.create(:user, :admin)
+    label = FactoryGirl.create(:label)
+    user.labels << label
+    login_as(user, scope: :user)
+    visit user_path(user)
+    expect(page).to have_content(label.name)
+  end
+
+  # Scenario: Add label to user from user profile
+  #   Given I am signed in
+  #   When I visit my profile page
+  #   Then I see that user's labels
+  scenario "adding labels on user's profile" do
+    user = FactoryGirl.create(:user, :admin)
+    login_as(user, scope: :user)
+    visit user_path(user)
+    fill_in 'Name', with: 'Fancy'
+    fill_in 'Color', with: '#00ffff'
+    click_button 'Add Label'
+    expect(page).to have_content('Fancy')
+    expect(page).to have_content('Label Fancy added to user')
+  end
+
+  # Scenario: Add existing label to user
+  #   Given I am signed in
+  #   When I visit my profile page
+  #   And I try to add a label that already exists
+  #   Then I see a message about that label already existing
+  scenario "add existing label on user's profile" do
+    user = FactoryGirl.create(:user, :admin)
+    label = FactoryGirl.create(:label)
+    user.labels << label
+    login_as(user, scope: :user)
+    visit user_path(user)
+    fill_in 'Name', with: 'Fancy'
+    fill_in 'Color', with: '#00ffff'
+    click_button 'Add Label'
+    expect(page).to have_content(/label already exists/i)
+  end
 end
